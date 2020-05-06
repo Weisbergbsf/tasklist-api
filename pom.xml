@@ -78,6 +78,13 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+			<plugin>
+				<groupId>org.flywaydb</groupId>
+				<artifactId>flyway-maven-plugin</artifactId>
+				<configuration>
+					<url>${env.CLEARDB_DATABASE_URL}</url>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 
