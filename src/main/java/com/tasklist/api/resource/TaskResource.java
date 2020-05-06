@@ -1,7 +1,5 @@
 package com.tasklist.api.resource;
 
-import java.net.URI;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.tasklist.api.domain.Task;
 import com.tasklist.api.domain.dto.TaskDto;
@@ -60,47 +57,46 @@ public class TaskResource {
 	@ApiOperation(value = "Create Task")
 	@PostMapping
 	public ResponseEntity<?> insert(@Valid @RequestBody TaskDto objDto) {
-		Task obj = new Task();
+		Task task = new Task();
 		try {
-			obj = service.fromDTO(objDto);
+			task = service.fromDTO(objDto);
 
 		} catch (IllegalArgumentException e) {
 			System.err.println("IllegalArgumentException: " + e.getMessage());
 			throw new BadRequestException(e.getMessage());
 		}
 
-		obj = service.insert(obj);
-		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
-		return ResponseEntity.ok().body(new ApiResponse(true, "Task created successfully! uri: " + uri));
+		task = service.insert(task);
+		return ResponseEntity.ok().body(new ApiResponse(true, task));
 	}
 
 	@ApiOperation(value = "Update Task")
 	@PutMapping("/{id}")
 	public ResponseEntity<?> update(@Valid @RequestBody TaskDto objDto, @PathVariable Integer id) {
-		Task obj = new Task();
+		Task task = new Task();
 		try {
-			obj = service.fromDTO(objDto);
-			obj.setId(id);
-			obj = service.updateTask(obj);
+			task = service.fromDTO(objDto);
+			task.setId(id);
+			task = service.updateTask(task);
 		} catch (IllegalArgumentException e) {
 			throw new BadRequestException(e.getMessage());
 		}
 
-		return ResponseEntity.ok().body(new ApiResponse(true, "Task updated successfully!"));
+		return ResponseEntity.ok().body(new ApiResponse(true, task));
 	}
 
 	@ApiOperation(value = "Update Status Task")
 	@PatchMapping("/{id}")
 	public ResponseEntity<?> updateStatus(@Valid @RequestBody TaskStatusDto objDto, @PathVariable Integer id) {
-		Task obj = new Task();
+		Task task = new Task();
 		try {
-			obj = service.fromDTO(objDto);
-			obj.setId(id);
-			obj = service.updateStatusTask(obj);
+			task = service.fromDTO(objDto);
+			task.setId(id);
+			task = service.updateStatusTask(task);
 		} catch (IllegalArgumentException e) {
 			throw new BadRequestException(e.getMessage());
 		}
-		return ResponseEntity.ok().body(new ApiResponse(true, "Task Status updated successfully.!"));
+		return ResponseEntity.ok().body(new ApiResponse(true, task));
 	}
 
 	@ApiOperation(value = "Deleta Task")
